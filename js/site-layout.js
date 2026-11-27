@@ -1,5 +1,5 @@
 /**
- * 站点共享布局：统一渲染页头、页脚和悬浮入口，降低多页面重复维护成本
+ * 站点共享布局：统一渲染页头、页脚、悬浮入口并暴露共享多语言工具
  */
 (function (window, document) {
     'use strict';
@@ -16,13 +16,20 @@
 
     function flattenTranslationSections(data) {
         const flat = {};
+        if (!data || typeof data !== 'object') {
+            return flat;
+        }
         for (const section in data) {
             if (!Object.prototype.hasOwnProperty.call(data, section)) {
                 continue;
             }
-            for (const key in data[section]) {
-                if (Object.prototype.hasOwnProperty.call(data[section], key)) {
-                    flat[key] = data[section][key];
+            const group = data[section];
+            if (!group || typeof group !== 'object') {
+                continue;
+            }
+            for (const key in group) {
+                if (Object.prototype.hasOwnProperty.call(group, key)) {
+                    flat[key] = group[key];
                 }
             }
         }
@@ -107,10 +114,11 @@
     function buildNavItems(currentPage, translations) {
         return NAV_ITEMS.map(function (item) {
             const isActive = item.page === currentPage ? ' active' : '';
+            const ariaCurrent = item.page === currentPage ? ' aria-current="page"' : '';
             const label = textOf(translations, item.key, item.fallback);
             return (
                 `<li class="nav-item${isActive}">` +
-                `<a class="nav-link" href="${item.href}" data-i18n="${item.key}">${label}</a>` +
+                `<a class="nav-link" href="${item.href}" data-i18n="${item.key}"${ariaCurrent}>${label}</a>` +
                 '</li>'
             );
         }).join('');
@@ -122,6 +130,7 @@
         const quoteText = textOf(translations, 'get_quote', 'Get a Quote');
 
         return `
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="navigation">
     <div class="header-top">
         <div class="container">
@@ -150,9 +159,9 @@
                             <span>penny.liao@yametissue.com</span>
                         </a>
                         <div class="header-top-lang" role="group" aria-label="Language selector">
-                            <button type="button" class="lang-option" data-lang="zh" aria-label="简体中文">中</button>
-                            <button type="button" class="lang-option" data-lang="en" aria-label="English">EN</button>
-                            <button type="button" class="lang-option" data-lang="es" aria-label="Español">ES</button>
+                            <button type="button" class="lang-option${lang === 'zh' ? ' active' : ''}" data-lang="zh" aria-label="简体中文" aria-pressed="${lang === 'zh'}">中</button>
+                            <button type="button" class="lang-option${lang === 'en' ? ' active' : ''}" data-lang="en" aria-label="English" aria-pressed="${lang === 'en'}">EN</button>
+                            <button type="button" class="lang-option${lang === 'es' ? ' active' : ''}" data-lang="es" aria-label="Español" aria-pressed="${lang === 'es'}">ES</button>
                         </div>
                     </div>
                 </div>
@@ -163,7 +172,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <nav class="navbar navbar-expand-lg px-0 py-3">
+                    <nav class="navbar navbar-expand-lg px-0 py-3" aria-label="Primary navigation">
                         <a class="navbar-brand" href="index.html">
                             Ya<span>me.</span>
                         </a>
@@ -222,7 +231,7 @@
                     <h4 class="text-capitalize mb-4" data-i18n="footer_quote_support">${textOf(translations, 'footer_quote_support', 'Quotation Support')}</h4>
                     <p class="footer-brand-copy" data-i18n="footer_quote_support_desc">${textOf(translations, 'footer_quote_support_desc', 'Share target market, specifications and monthly volume to receive a practical quotation plan.')}</p>
                     <div class="footer-cta-links">
-                        <a href="project.html" class="btn btn-main btn-small btn-round-full mb-2" data-i18n="hero_btn_secondary">${textOf(translations, 'hero_btn_secondary', 'View Products')}</a>
+                        <a href="project.html" class="btn btn-main btn-small btn-round-full mb-2" data-i18n="hero_btn_secondary">${textOf(translations, 'hero_btn_secondary', 'View Product Catalog')}</a>
                         <a href="contact.html" class="btn btn-small btn-outline-light btn-round-full mb-2 ml-lg-2" data-i18n="contact_us">${textOf(translations, 'contact_us', 'Contact Us')}</a>
                     </div>
                 </div>
@@ -234,9 +243,9 @@
                     </div>
                     <p class="footer-brand-copy" data-i18n="footer_brand_desc">${textOf(translations, 'footer_brand_desc', 'Tissue sourcing, OEM packaging and export coordination for global buyers.')}</p>
                     <ul class="list-unstyled footer-contact-list">
-                        <li><i class="ti-location-pin text-color mr-2"></i><span data-i18n="footer_address">${textOf(translations, 'footer_address', 'B-1306, Fortune Plaza, Zhengyang Road, Zhoucun Dist, Zibo, Shandong, China')}</span></li>
-                        <li><i class="ti-email text-color mr-2"></i><a href="mailto:penny.liao@yametissue.com">penny.liao@yametissue.com</a></li>
-                        <li><i class="ti-mobile text-color mr-2"></i><a href="tel:+8618678139489">+86 18678139489</a></li>
+                        <li><i class="ti-location-pin text-color mr-2" aria-hidden="true"></i><span data-i18n="footer_address">${textOf(translations, 'footer_address', 'B-1306, Fortune Plaza, Zhengyang Road, Zhoucun Dist, Zibo, Shandong, China')}</span></li>
+                        <li><i class="ti-email text-color mr-2" aria-hidden="true"></i><a href="mailto:penny.liao@yametissue.com">penny.liao@yametissue.com</a></li>
+                        <li><i class="ti-mobile text-color mr-2" aria-hidden="true"></i><a href="tel:+8618678139489">+86 18678139489</a></li>
                     </ul>
                 </div>
             </div>
@@ -250,19 +259,19 @@
                 </div>
                 <div class="col-lg-6 text-left text-lg-right">
                     <ul class="list-inline footer-socials">
-                        <li class="list-inline-item"><a href="https://wa.me/85254452984"><i class="ti-comment-alt mr-2" aria-hidden="true"></i>WhatsApp</a></li>
-                        <li class="list-inline-item"><a href="https://www.youtube.com/@Pennyliao-z5h"><i class="ti-youtube mr-2" aria-hidden="true"></i>YouTube</a></li>
-                        <li class="list-inline-item"><a href="https://www.instagram.com/liaozhiping1018"><i class="ti-instagram mr-2" aria-hidden="true"></i>Instagram</a></li>
+                        <li class="list-inline-item"><a href="https://wa.me/85254452984" target="_blank" rel="noopener noreferrer"><i class="ti-comment-alt mr-2" aria-hidden="true"></i>WhatsApp</a></li>
+                        <li class="list-inline-item"><a href="https://www.youtube.com/@Pennyliao-z5h" target="_blank" rel="noopener noreferrer"><i class="ti-youtube mr-2" aria-hidden="true"></i>YouTube</a></li>
+                        <li class="list-inline-item"><a href="https://www.instagram.com/liaozhiping1018" target="_blank" rel="noopener noreferrer"><i class="ti-instagram mr-2" aria-hidden="true"></i>Instagram</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </footer>
-<div id="scroll-to-top" class="scroll-to-top">
+<button type="button" id="scroll-to-top" class="scroll-to-top" aria-label="Back to top">
     <span class="icon ti-angle-up" aria-hidden="true"></span>
-</div>
-<a href="https://wa.me/85254452984" class="whatsapp-chat" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+</button>
+<a href="https://wa.me/85254452984" class="whatsapp-chat" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
     <i class="ti-comment-alt" aria-hidden="true"></i>
 </a>`;
     }
@@ -316,7 +325,14 @@
         renderHeaderMount: renderHeaderMount,
         renderFooterMount: renderFooterMount,
         renderSharedLayout: renderSharedLayout,
-        resolveInitialLanguage: resolveInitialLanguage
+        resolveInitialLanguage: resolveInitialLanguage,
+        i18n: {
+            SUPPORTED_LANGS: SUPPORTED_LANGS,
+            flattenTranslationSections: flattenTranslationSections,
+            normalizeLanguageCode: normalizeLanguageCode,
+            detectBrowserLanguage: detectBrowserLanguage,
+            resolveInitialLanguage: resolveInitialLanguage
+        }
     };
 
     if (document.readyState !== 'loading') {

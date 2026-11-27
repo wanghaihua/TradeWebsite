@@ -164,8 +164,7 @@
 .intro-item::after,
 .service-item::after,
 .process-card::after,
-.about-info-item::after,
-.testimonial-card::before {
+.about-info-item::after {
   content: "";
   position: absolute;
   right: 18px;
@@ -293,21 +292,29 @@
 
 .js-motion-ready .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(24px) scale(0.985);
-  transition: opacity 0.72s ease, transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
+  translate: 0 22px;
+  scale: 0.985;
+  transition:
+    opacity 0.65s ease,
+    translate 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+  transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms, 0ms;
 }
 
 .js-motion-ready .reveal-on-scroll.is-visible {
   opacity: 1;
-  transform: none;
+  translate: 0 0;
+  scale: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .js-motion-ready .reveal-on-scroll {
     opacity: 1;
-    transform: none;
+    translate: 0 0;
+    scale: 1;
     transition: none;
   }
 

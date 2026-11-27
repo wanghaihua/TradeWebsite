@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /pricing.html
+Disallow: /test-translation.html
+Disallow: /translation-editor.html
+
+Sitemap: https://yamepaper.com/sitemap.xml
