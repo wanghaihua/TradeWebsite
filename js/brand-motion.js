@@ -58,9 +58,15 @@
         body.classList.add('js-motion-ready');
 
         const elements = uniqueElements();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 800;
+
         elements.forEach(function (element, index) {
             element.classList.add('reveal-on-scroll');
-            element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
+            element.style.setProperty('--reveal-delay', `${Math.min(index % 3, 2) * 35}ms`);
+            const rect = element.getBoundingClientRect();
+            if (rect.top < viewportHeight + 60) {
+                element.classList.add('is-visible');
+            }
         });
 
         if (!('IntersectionObserver' in window)) {
@@ -78,12 +84,14 @@
                 }
             });
         }, {
-            threshold: 0.14,
-            rootMargin: '0px 0px -8% 0px'
+            threshold: 0.01,
+            rootMargin: '0px 0px 120px 0px'
         });
 
         elements.forEach(function (element) {
-            observer.observe(element);
+            if (!element.classList.contains('is-visible')) {
+                observer.observe(element);
+            }
         });
     }
 

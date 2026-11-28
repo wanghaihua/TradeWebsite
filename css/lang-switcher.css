@@ -1,13 +1,12 @@
-/* Language Switcher */
+/* Architectural Segmented Language Switcher */
 .header-top-lang {
     display: inline-flex;
     align-items: center;
     gap: 2px;
-    min-height: 34px;
-    padding: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
+    padding: 2px;
+    border: 1px solid rgba(247, 244, 237, 0.2);
+    border-radius: var(--radius-xs, 2px);
+    background: rgba(247, 244, 237, 0.04);
     flex-shrink: 0;
 }
 
@@ -15,54 +14,48 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 34px;
-    height: 28px;
-    padding: 0 9px;
+    min-width: 32px;
+    height: 24px;
+    padding: 0 8px;
     border: 0;
-    border-radius: 999px;
+    border-radius: 1px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.86);
+    color: rgba(247, 244, 237, 0.72);
+    font-family: var(--font-mono, monospace);
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.06em;
     line-height: 1;
     cursor: pointer;
-    transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    transition: background-color 0.16s ease, color 0.16s ease;
 }
 
 .header-top-lang .lang-option[data-lang="zh"] {
-    min-width: 30px;
-    padding: 0 8px;
+    min-width: 28px;
+    padding: 0 7px;
     letter-spacing: 0;
 }
 
 .header-top-lang .lang-option:hover,
 .header-top-lang .lang-option:focus {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(247, 244, 237, 0.12);
     color: #ffffff;
 }
 
 .header-top-lang .lang-option:focus-visible {
-    outline: 2px solid #ead7b3;
-    outline-offset: 2px;
+    outline: 2px solid #D7BA95;
+    outline-offset: 1px;
 }
 
 .header-top-lang .lang-option.active {
-    background: rgba(255, 253, 248, 0.98);
-    color: var(--color-primary-dark);
-    box-shadow: 0 4px 10px rgba(20, 43, 34, 0.14);
+    background: #F5F2EB;
+    color: #13251D;
 }
 
 .header-top-lang .lang-option.active:hover,
 .header-top-lang .lang-option.active:focus {
-    background: rgba(255, 253, 248, 0.98);
-    color: var(--color-primary-dark);
-}
-
-@media (max-width: 768px) {
-    .header-top-lang {
-        min-height: 34px;
-    }
+    background: #F5F2EB;
+    color: #13251D;
 }
 
 @media (max-width: 576px) {
@@ -71,37 +64,32 @@
         justify-content: center;
         width: auto;
         max-width: 100%;
-        margin: 0;
     }
 
     .header-top-lang .lang-option {
         min-width: 34px;
-        height: 30px;
-        padding: 0 9px;
+        height: 28px;
         font-size: 11px;
-    }
-
-    .header-top-lang .lang-option[data-lang="zh"] {
-        min-width: 30px;
-        padding: 0 8px;
     }
 }
 
 .footer-brand-copy {
-    color: rgba(255, 255, 255, 0.76);
-    line-height: 1.8;
+    color: rgba(247, 244, 237, 0.72);
+    font-size: 0.88rem;
+    line-height: 1.75;
     margin-bottom: 16px;
 }
 
 .footer .text-color {
-    color: #f1debc !important;
+    color: #D7BA95 !important;
 }
 
 .footer-contact-list li {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 12px;
-    color: rgba(255, 255, 255, 0.82);
+    margin-bottom: 11px;
+    font-size: 0.86rem;
+    color: rgba(247, 244, 237, 0.78);
 }
 
 .footer-contact-list a {
@@ -109,13 +97,13 @@
 }
 
 .footer-contact-list a:hover {
-    color: #fff;
+    color: #ffffff;
 }
 
 .footer-cta-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .footer-cta-links .btn {
